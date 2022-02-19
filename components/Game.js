@@ -10,7 +10,7 @@ const Game = ({ game, submit }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [userInput]);
+  });
 
   const handleKeyDown = (event) => {
     const { key } = event;
@@ -18,6 +18,9 @@ const Game = ({ game, submit }) => {
   };
 
   const handleKey = (key) => {
+    if (game.status !== "IN_PROGRESS") {
+      return;
+    }
     if (key === "Backspace") {
       setUserInput(userInput.slice(0, -1));
       return;
