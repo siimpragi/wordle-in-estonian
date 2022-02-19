@@ -4,7 +4,7 @@ const Board = ({ board, evaluations }) => {
   return (
     <div>
       {board.map((word, i) => (
-        <Row key={i} word={word} states={evaluations[i]} />
+        <Row key={i} word={word} evaluation={evaluations[i]} />
       ))}
     </div>
   );
