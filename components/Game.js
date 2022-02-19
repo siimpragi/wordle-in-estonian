@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { words } from "../static/words";
 import Board from "./Board";
+import Keyboard from "./Keyboard";
 
 const Game = ({ game, submit }) => {
   const [userInput, setUserInput] = useState("");
@@ -66,6 +67,7 @@ const Game = ({ game, submit }) => {
   return (
     <div>
       <Board board={shownBoard} evaluations={shownEvaluations} />
+      <Keyboard board={board} evaluations={evaluations} handleKey={handleKey} />
     </div>
   );
 };
