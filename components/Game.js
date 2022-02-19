@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { words } from "../static/words";
 import Board from "./Board";
 import Keyboard from "./Keyboard";
+import Toast from "./Toast";
 
 const Game = ({ game, submit }) => {
   const [userInput, setUserInput] = useState("");
+  const [toastMessage, setToastMessage] = useState(null);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -40,13 +42,21 @@ const Game = ({ game, submit }) => {
     setUserInput(userInput.concat(key));
   };
 
+  const showToast = (message) => {
+    // TODO: toasts should be set into an array probably
+    setToastMessage(message);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
+  };
+
   const makeGuess = () => {
-    if (userInput.length !== 5) {
-      alert("word has to be 5 letters");
+    if (userInput.length < 5) {
+      showToast("not enough letters");
       return;
     }
     if (words.indexOf(userInput) === -1) {
-      alert("not a word");
+      showToast("not in wordlist");
       return;
     }
     submit(userInput);
@@ -68,6 +78,7 @@ const Game = ({ game, submit }) => {
     <div>
       <Board board={shownBoard} evaluations={shownEvaluations} />
       <Keyboard board={board} evaluations={evaluations} handleKey={handleKey} />
+      <Toast message={toastMessage} />
     </div>
   );
 };
