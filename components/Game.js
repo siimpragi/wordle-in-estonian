@@ -6,29 +6,35 @@ const Game = ({ game, submit }) => {
   const [userInput, setUserInput] = useState("");
 
   useEffect(() => {
-    const handler = ({ key }) => {
-      if (key === "Backspace") {
-        setUserInput(userInput.slice(0, -1));
-        return;
-      }
-      if (key === "Enter") {
-        makeGuess();
-        return;
-      }
-      if (userInput.length >= 5) {
-        return;
-      }
-      const letterKeys = ["qwertyuiopüõ", "asdfghjklöä", "zxcvbnmšž"];
-      const letters = letterKeys.join("").split("");
-      if (letters.includes(key)) {
-        setUserInput(userInput.concat(key));
-      }
-    };
-    window.addEventListener("keydown", handler);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener("keydown", handler);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [userInput]);
+
+  const handleKeyDown = (event) => {
+    const { key } = event;
+    handleKey(key);
+  };
+
+  const handleKey = (key) => {
+    if (key === "Backspace") {
+      setUserInput(userInput.slice(0, -1));
+      return;
+    }
+    if (key === "Enter") {
+      makeGuess();
+      return;
+    }
+    if (userInput.length >= 5) {
+      return;
+    }
+    const validLetters = "qwertyuiopüõasdfghjklöäzxcvbnmšž".split(""); // TODO: this is static
+    if (validLetters.includes(key) === false) {
+      return;
+    }
+    setUserInput(userInput.concat(key));
+  };
 
   const makeGuess = () => {
     if (userInput.length !== 5) {
