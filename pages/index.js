@@ -69,11 +69,6 @@ export default function Home({ currentSolution, timestamps }) {
         </h1>
 
         <Game game={game} submit={submit} />
-
-        <div>
-          <h2>Next Wordle</h2>
-          <Countdown toTs={timestamps.nextSolution} />
-        </div>
       </main>
     </div>
   );
