@@ -9,7 +9,7 @@ const Toast = ({ message }) => {
     zIndex: "5318008",
     padding: "10px",
     color: "white",
-    background: "black",
+    background: "rgba(0,0,0,0.5)",
   };
   return <div style={toastStyle}>{message}</div>;
 };
