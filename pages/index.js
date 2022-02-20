@@ -4,7 +4,9 @@ import { saveGame, getSavedGame } from "../lib/data";
 import { getNewGameWith } from "../lib/game";
 import Head from "next/head";
 import Game from "../components/Game";
-import Countdown from "../components/Countdown";
+import Modal from "../components/Modal";
+import Statistics from "../components/Statistics";
+import Help from "../components/Help";
 
 export default function Home({ currentSolution, timestamps }) {
   const [game, setGame] = useState(getNewGameWith(currentSolution));
@@ -17,6 +19,7 @@ export default function Home({ currentSolution, timestamps }) {
   useEffect(() => {
     saveGame(game);
   }, [game]);
+  const [showInModal, setShowInModal] = useState(null);
 
   const submit = (word) => {
     const letters = word.split("");
@@ -58,15 +61,25 @@ export default function Home({ currentSolution, timestamps }) {
   return (
     <div>
       <Head>
-        <title>wordle-in-estonian</title>
+        <title>Wordle eesti keeles</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <header>
+        <button onClick={() => setShowInModal("help")}>Abi</button>
+        <h1>Wordle eesti keeles</h1>
+        <button onClick={() => setShowInModal("statistics")}>Statistika</button>
+      </header>
+
       <main>
-        <h1>
-          Wordle {currentSolution.number} ({currentSolution.word}) -{" "}
-          {game.status}
-        </h1>
+        {showInModal !== null && (
+          <Modal handleClose={() => setShowInModal(null)}>
+            {showInModal === "help" && <Help />}
+            {showInModal === "statistics" && (
+              <Statistics nextSolutionTs={timestamps.nextSolution} />
+            )}
+          </Modal>
+        )}
 
         <Game game={game} submit={submit} />
       </main>
