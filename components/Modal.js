@@ -1,37 +1,15 @@
-const Modal = ({ children, handleClose }) => {
-  const overlayStyle = {
-    width: "100%",
-    height: "100%",
-    background: "rgba(0,0,0,0.25)",
-    position: "absolute",
-    top: "0",
-    left: "0",
-    zIndex: 9999999999,
-  };
-  const containerStyle = {
-    overflowY: "auto",
-    maxWidth: 500,
-    background: "white",
-    height: "90%",
-    margin: "0 auto",
-    position: "relative",
-    padding: "50px 10px 10px",
-  };
-  const closeButtonStyle = {
-    position: "absolute",
-    top: "10px",
-    right: "10px",
-  };
-  return (
-    <div style={overlayStyle}>
-      <div style={containerStyle}>
-        <button onClick={handleClose} style={closeButtonStyle}>
-          close
-        </button>
-        {children}
+import Image from "next/image";
+import styles from "../styles/Modal.module.css";
+
+const Modal = ({ children, handleClose }) => (
+  <div className={styles.overlay}>
+    <div className={styles.content}>
+      <div className={styles.close} onClick={handleClose}>
+        <Image src="/x-circle-fill.svg" alt="Sulge" width={24} height={24} />
       </div>
+      {children}
     </div>
-  );
-};
+  </div>
+);
 
 export default Modal;

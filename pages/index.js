@@ -3,6 +3,7 @@ import { solutions } from "../static/solutions";
 import { saveGame, getSavedGame } from "../lib/data";
 import { getNewGameWith } from "../lib/game";
 import Head from "next/head";
+import Image from "next/image";
 import Game from "../components/Game";
 import Modal from "../components/Modal";
 import Statistics from "../components/Statistics";
@@ -66,12 +67,30 @@ export default function Home({ currentSolution, timestamps }) {
       </Head>
 
       <header>
-        <button onClick={() => setShowInModal("help")}>Abi</button>
-        <h1>Wordle eesti keeles</h1>
-        <button onClick={() => setShowInModal("statistics")}>Statistika</button>
+        <button onClick={() => setShowInModal("help")}>
+          <Image
+            src="/question-circle-fill.svg"
+            alt="Abi"
+            width={24}
+            height={24}
+          />
+        </button>
+        <h1>
+          Wordle eesti keeles <span>#{currentSolution.number}</span>
+        </h1>
+        <button onClick={() => setShowInModal("statistics")}>
+          <Image
+            src="/bar-chart-fill.svg"
+            alt="Statistika"
+            width={24}
+            height={24}
+          />
+        </button>
       </header>
 
       <main>
+        <Game game={game} submit={submit} />
+
         {showInModal !== null && (
           <Modal handleClose={() => setShowInModal(null)}>
             {showInModal === "help" && <Help />}
@@ -80,8 +99,6 @@ export default function Home({ currentSolution, timestamps }) {
             )}
           </Modal>
         )}
-
-        <Game game={game} submit={submit} />
       </main>
     </div>
   );

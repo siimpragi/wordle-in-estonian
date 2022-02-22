@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: column;
+}
+
+.boardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.keyboardContainer {
+  height: 200px;
+}

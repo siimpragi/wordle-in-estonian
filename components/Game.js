@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { words } from "../static/words";
+import styles from "../styles/Game.module.css";
 import Board from "./Board";
 import Keyboard from "./Keyboard";
 import Toast from "./Toast";
@@ -75,9 +76,17 @@ const Game = ({ game, submit }) => {
   }
 
   return (
-    <div>
-      <Board board={shownBoard} evaluations={shownEvaluations} />
-      <Keyboard board={board} evaluations={evaluations} handleKey={handleKey} />
+    <div className={styles.container}>
+      <div className={styles.boardContainer}>
+        <Board board={shownBoard} evaluations={shownEvaluations} />
+      </div>
+      <div className={styles.keyboardContainer}>
+        <Keyboard
+          board={board}
+          evaluations={evaluations}
+          handleKey={handleKey}
+        />
+      </div>
       <Toast message={toastMessage} />
     </div>
   );
