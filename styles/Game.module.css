@@ -18,3 +18,15 @@
 .keyboardContainer {
   height: 200px;
 }
+
+.toast {
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  width: 100%;
+  z-index: 5318008;
+  padding: 12px;
+  color: white;
+  background: black;
+  text-align: center;
+}

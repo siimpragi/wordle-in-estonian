@@ -53,11 +53,11 @@ const Game = ({ game, submit }) => {
 
   const makeGuess = () => {
     if (userInput.length < 5) {
-      showToast("not enough letters");
+      showToast("Pole piisavalt tähti!");
       return;
     }
     if (words.indexOf(userInput) === -1) {
-      showToast("not in wordlist");
+      showToast("Pole sõna.");
       return;
     }
     submit(userInput);
@@ -88,6 +88,7 @@ const Game = ({ game, submit }) => {
         />
       </div>
       <Toast message={toastMessage} />
+      {game.status === "FAIL" && <Toast message={game.solution.word} />}
     </div>
   );
 };
