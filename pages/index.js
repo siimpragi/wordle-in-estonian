@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { solutions } from "../static/solutions";
-import { saveGame, getSavedGame } from "../lib/data";
+import {
+  saveGame,
+  getSavedGame,
+  saveStatistics,
+  getSavedStatistics,
+} from "../lib/data";
 import { getNewGameWith } from "../lib/game";
+import { getEmptyStatistics } from "../lib/statistics";
 import Head from "next/head";
 import Image from "next/image";
 import Game from "../components/Game";
@@ -11,16 +17,27 @@ import Help from "../components/Help";
 
 export default function Home({ currentSolution, timestamps }) {
   const [game, setGame] = useState(getNewGameWith(currentSolution));
+  const [statistics, setStatistics] = useState(getEmptyStatistics());
+  const [showInModal, setShowInModal] = useState(null);
   useEffect(() => {
     const savedGame = getSavedGame();
+    const savedStatistics = getSavedStatistics();
+    if (savedGame === null && savedStatistics === null) {
+      setShowInModal("help");
+    }
     if (savedGame && savedGame.solution.number === game.solution.number) {
       setGame(savedGame);
+    }
+    if (savedStatistics) {
+      setStatistics(savedStatistics);
     }
   }, [game.solution.number]);
   useEffect(() => {
     saveGame(game);
   }, [game]);
-  const [showInModal, setShowInModal] = useState(null);
+  useEffect(() => {
+    saveStatistics(statistics);
+  }, [statistics]);
 
   const submit = (word) => {
     const letters = word.split("");
@@ -57,13 +74,48 @@ export default function Home({ currentSolution, timestamps }) {
     };
 
     setGame(updatedGame);
+
+    // TODO: really need to split this method in two and move into lib
+    // TODO: this whole thing is starting to look horrible...
+    if (updatedStatus === "IN_PROGRESS") {
+      return;
+    }
+
+    const updatedGuesses = { ...statistics.guesses };
+    if (updatedStatus === "FAIL") {
+      updatedGuesses["fail"] += 1;
+    } else {
+      const numberOfGuesses = updatedBoard.filter((word) => word !== "").length;
+      updatedGuesses[numberOfGuesses] += 1;
+    }
+    const updatedGamesPlayed = statistics.gamesPlayed + 1;
+    const updatedGamesWon =
+      updatedStatus === "WIN" ? statistics.gamesWon + 1 : statistics.gamesWon;
+    const updatedWinPercentage = Math.round(
+      (updatedGamesWon * 100) / updatedGamesPlayed
+    );
+
+    const updatedStatistics = {
+      ...statistics,
+      guesses: updatedGuesses,
+      winPercentage: updatedWinPercentage,
+      gamesPlayed: updatedGamesPlayed,
+      gamesWon: updatedGamesWon,
+    };
+
+    setStatistics(updatedStatistics);
   };
 
   return (
     <div>
       <Head>
         <title>Wordle eesti keeles</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        {/* TODO: should rename the env var now */}
+        <meta
+          property="og:image"
+          content={`https://${process.env.NEXT_PUBLIC_SHARE_URL}/og-image.png`}
+        />
       </Head>
 
       <header>
@@ -95,7 +147,11 @@ export default function Home({ currentSolution, timestamps }) {
           <Modal handleClose={() => setShowInModal(null)}>
             {showInModal === "help" && <Help />}
             {showInModal === "statistics" && (
-              <Statistics nextSolutionTs={timestamps.nextSolution} />
+              <Statistics
+                statistics={statistics}
+                game={game}
+                nextSolutionTs={timestamps.nextSolution}
+              />
             )}
           </Modal>
         )}
