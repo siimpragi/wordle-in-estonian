@@ -1,0 +1,32 @@
+.container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: column;
+}
+
+.boardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.keyboardContainer {
+  height: 200px;
+}
+
+.toast {
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  width: 100%;
+  z-index: 5318008;
+  padding: 12px;
+  color: white;
+  background: black;
+  text-align: center;
+}
